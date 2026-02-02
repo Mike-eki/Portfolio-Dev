@@ -6,5 +6,5 @@ import tailwind from '@astrojs/tailwind';
 export default defineConfig({
   integrations: [tailwind()],
   // TODO: Update `site` (and optionally `base`) to match your GitHub Pages URL
-  site: 'https://example.com',
+  site: 'https://mike-eki.github.io',
 });
