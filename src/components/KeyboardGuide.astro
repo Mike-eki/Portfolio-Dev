@@ -1,0 +1,153 @@
+---
+interface KeyboardShortcut {
+  keys: string[];
+  description: string;
+}
+
+interface Props {
+  title: string;
+  shortcuts: KeyboardShortcut[];
+}
+
+const { title, shortcuts } = Astro.props;
+---
+
+<div 
+  id="keyboard-guide-banner"
+  class="fixed top-0 left-0 right-0 z-[60] bg-slate-950/95 backdrop-blur-sm border-b border-slate-800 px-4 py-2 hidden"
+>
+  <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+    <div class="flex items-center gap-6 overflow-x-auto scrollbar-hide">
+      <span class="text-xs font-semibold text-sky-400 whitespace-nowrap flex items-center gap-1.5">
+        <span class="text-lg">⌨️</span>
+        <span>{title}</span>
+      </span>
+      <div class="flex items-center gap-4">
+        {shortcuts.map((shortcut) => (
+          <div class="flex items-center gap-2 whitespace-nowrap">
+            <div class="flex gap-0.5">
+              {shortcut.keys.map((key) => (
+                <kbd class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded border border-slate-600 bg-slate-800 font-mono text-[9px] text-slate-200 shadow-sm">
+                  {key}
+                </kbd>
+              ))}
+            </div>
+            <span class="text-[10px] text-slate-400">{shortcut.description}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+    <button
+      type="button"
+      id="close-keyboard-guide"
+      class="flex-shrink-0 text-slate-400 hover:text-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 rounded p-1"
+      aria-label="Close keyboard guide"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script>
+  // Show keyboard guide banner on first keyboard interaction
+  let hasShownBanner = false;
+  
+  function updateNavPosition() {
+    const banner = document.getElementById('keyboard-guide-banner');
+    const nav = document.getElementById('main-nav');
+    
+    if (banner && nav) {
+      if (banner.classList.contains('hidden')) {
+        nav.style.top = '0';
+      } else {
+        const bannerHeight = banner.offsetHeight;
+        nav.style.top = `${bannerHeight}px`;
+      }
+    }
+  }
+  
+  function showKeyboardGuide() {
+    if (!hasShownBanner) {
+      const banner = document.getElementById('keyboard-guide-banner');
+      if (banner) {
+        banner.classList.remove('hidden');
+        hasShownBanner = true;
+        updateNavPosition();
+      }
+    }
+  }
+  
+  function hideKeyboardGuide() {
+    const banner = document.getElementById('keyboard-guide-banner');
+    if (banner) {
+      banner.classList.add('hidden');
+      updateNavPosition();
+    }
+  }
+  
+  // Show on any keyboard navigation key
+  document.addEventListener('keydown', (e) => {
+    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
+      showKeyboardGuide();
+    }
+  }, { once: true });
+  
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const banner = document.getElementById('keyboard-guide-banner');
+      if (banner && !banner.classList.contains('hidden')) {
+        hideKeyboardGuide();
+      }
+    }
+  });
+  
+  function toggleKeyboardGuide() {
+    const banner = document.getElementById('keyboard-guide-banner');
+    if (banner) {
+      if (banner.classList.contains('hidden')) {
+        banner.classList.remove('hidden');
+        hasShownBanner = true;
+        updateNavPosition();
+      } else {
+        hideKeyboardGuide();
+      }
+    }
+  }
+  
+  // Close button handler
+  document.addEventListener('DOMContentLoaded', () => {
+    const closeBtn = document.getElementById('close-keyboard-guide');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', hideKeyboardGuide);
+    }
+    
+    // Toggle button handler (from nav)
+    const toggleBtn = document.getElementById('keyboard-guide-toggle');
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', toggleKeyboardGuide);
+    }
+    
+    // Show banner on load if user has a keyboard (fine pointer)
+    const hasKeyboard = window.matchMedia('(pointer: fine)').matches;
+    if (hasKeyboard) {
+      showKeyboardGuide();
+    }
+    
+    // Initial position update
+    updateNavPosition();
+  });
+</script>
+
+<style>
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+</style>

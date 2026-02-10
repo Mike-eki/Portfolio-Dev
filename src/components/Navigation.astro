@@ -1,0 +1,119 @@
+---
+interface NavItem {
+  id: string;
+  label: string;
+}
+
+interface Props {
+  items: NavItem[];
+  currentLang: string;
+}
+
+const { items, currentLang } = Astro.props;
+---
+
+<nav class="fixed left-0 right-0 z-50 bg-slate-950/95 backdrop-blur-sm border-b border-slate-800 transition-all duration-300" id="main-nav" style="top: 0;">
+  <div class="px-6 py-3 grid grid-cols-[1fr_auto_1fr] items-center">
+    <!-- Logo placeholder -->
+    <div class="flex items-center">
+      <a 
+        href="#hero" 
+        class="inline-flex items-center justify-center w-9 h-9 rounded-md bg-sky-500/10 text-sky-400 font-bold text-sm hover:bg-sky-500/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
+        aria-label="Go to top"
+      >
+        M
+      </a>
+    </div>
+    
+    <!-- Navigation items centered -->
+    <ul class="flex items-center justify-center gap-1 sm:gap-2">
+      {items.map((item, index) => (
+        <li>
+          <a
+            href={`#${item.id}`}
+            data-nav-link
+            data-section={item.id}
+            data-section-index={index}
+            class="nav-link inline-flex items-center gap-2 px-3 py-2 text-xs sm:text-sm font-medium text-slate-300 hover:text-sky-400 hover:bg-slate-800/50 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
+          >
+            <span class="hidden lg:inline-flex items-center justify-center w-5 h-5 rounded bg-slate-800 text-slate-400 text-[10px] font-mono border border-slate-700">{index + 1}</span>
+            <span>{item.label}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    
+    <!-- Right side buttons -->
+    <div class="flex items-center justify-end gap-2">
+      <button
+        id="keyboard-guide-toggle"
+        type="button"
+        class="hidden lg:flex flex-shrink-0 p-2 text-slate-300 hover:text-sky-400 hover:bg-slate-800 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
+        aria-label="Toggle keyboard shortcuts"
+        title="Keyboard shortcuts"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+        </svg>
+      </button>
+      <button
+        id="lang-switcher"
+        type="button"
+        class="flex-shrink-0 px-3 py-1.5 text-xs font-bold text-slate-300 hover:text-sky-400 hover:bg-slate-800 rounded-md border border-slate-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
+        aria-label="Switch language"
+      >
+        {currentLang === 'en' ? 'ES' : 'EN'}
+      </button>
+    </div>
+  </div>
+</nav>
+
+<script>
+  // Track active section using Intersection Observer
+  const sections = document.querySelectorAll<HTMLElement>('section[id]');
+  const navLinks = document.querySelectorAll<HTMLAnchorElement>('[data-nav-link]');
+
+  const observerOptions = {
+    root: null,
+    rootMargin: '-100px 0px -66% 0px',
+    threshold: 0.1,
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const sectionId = entry.target.id;
+        
+        // Update active state
+        navLinks.forEach((link) => {
+          const isActive = link.dataset.section === sectionId;
+          link.classList.toggle('text-sky-400', isActive);
+          link.classList.toggle('bg-slate-800', isActive);
+          link.classList.toggle('text-slate-300', !isActive);
+        });
+      }
+    });
+  }, observerOptions);
+
+  sections.forEach((section) => observer.observe(section));
+
+  // Smooth scroll on click
+  navLinks.forEach((link) => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = link.getAttribute('href')?.substring(1);
+      const targetSection = document.getElementById(targetId || '');
+      
+      if (targetSection) {
+        const navHeight = document.getElementById('main-nav')?.offsetHeight || 0;
+        const targetPosition = targetSection.offsetTop - navHeight - 20;
+        
+        window.scrollTo({
+          top: targetPosition,
+          behavior: 'smooth',
+        });
+      }
+    });
+  });
+</script>
+

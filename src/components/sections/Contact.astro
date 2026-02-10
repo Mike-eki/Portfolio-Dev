@@ -1,0 +1,218 @@
+---
+import Email from '../icons/Email.astro';
+import LinkedIn from '../icons/LinkedIn.astro';
+import GitHub from '../icons/GitHub.astro';
+
+interface Props {
+  heading: string;
+  intro: string;
+  email: string;
+  linkedinUrl: string;
+  githubUrl: string;
+  viewProfile: string;
+  viewRepositories: string;
+  connectText: string;
+}
+
+const { heading, intro, email, linkedinUrl, githubUrl, viewProfile, viewRepositories, connectText } = Astro.props as Props;
+
+// Encode email for basic obfuscation (reverse + base64)
+const encodedEmail = btoa(email.split('').reverse().join(''));
+---
+
+<section id="contact" class="px-6 py-12 space-y-8">
+  <header class="space-y-2">
+    <h2 class="text-2xl font-semibold">{heading}</h2>
+    <p class="max-w-2xl text-sm text-slate-300">{intro}</p>
+  </header>
+
+  <div class="grid gap-8 lg:grid-cols-2 lg:gap-12 w-full">
+    <!-- Left side: Visual decoration placeholder - Desktop only -->
+    <div class="hidden lg:flex order-2 lg:order-1 items-center justify-center rounded-lg border border-slate-800 bg-slate-900/40 p-8 min-h-[300px] lg:min-h-[400px]">
+      <div class="text-center space-y-4">
+        <!-- Animation placeholder - replace with your GIF/animation -->
+        <div class="relative">
+          <div class="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-sky-400/20 to-sky-600/20 flex items-center justify-center animate-pulse">
+            <div class="w-24 h-24 rounded-full bg-gradient-to-br from-sky-400/40 to-sky-600/40 flex items-center justify-center">
+              <svg class="w-12 h-12 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+            </div>
+          </div>
+          <!-- Floating icons around the main icon -->
+          <div class="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center animate-bounce" style="animation-delay: 0s;">
+            <Email class="w-4 h-4 text-sky-400" />
+          </div>
+          <div class="absolute top-1/2 -right-4 w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center animate-bounce" style="animation-delay: 0.2s;">
+            <LinkedIn class="w-4 h-4 text-sky-400" />
+          </div>
+          <div class="absolute -bottom-2 right-2 w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center animate-bounce" style="animation-delay: 0.4s;">
+            <GitHub class="w-4 h-4 text-slate-300" />
+          </div>
+        </div>
+        <p class="text-sm text-slate-400">
+          {connectText}
+        </p>
+        <!-- Suggestions for the user -->
+        <div class="text-xs text-slate-500 space-y-1">
+          <p>💡 Replace this with:</p>
+          <ul class="space-y-0.5">
+            <li>• Animated illustration</li>
+            <li>• Contact-themed GIF</li>
+            <li>• Lottie animation</li>
+            <li>• Decorative illustration</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right side: Contact cards -->
+    <div class="order-1 lg:order-2 flex flex-col justify-center space-y-4 w-full">
+      <!-- Email Card -->
+      <div class="group relative rounded-lg border border-slate-800 bg-slate-900/40 p-4 sm:p-6 transition-all hover:border-slate-700 hover:bg-slate-900/60">
+        <div class="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 text-center sm:text-left">
+          <div class="w-14 h-14 rounded-full bg-sky-500/10 flex items-center justify-center flex-shrink-0">
+            <Email class="h-6 w-6 text-sky-400" />
+          </div>
+          <div class="flex-1 min-w-0">
+            <h3 class="text-base font-semibold text-slate-200">Email</h3>
+            <div class="mt-1 flex items-center gap-2">
+              <span 
+                id="email-display"
+                data-encoded={encodedEmail}
+                class="text-sm text-sky-300 font-mono select-all truncate"
+              >
+                [Click to reveal]
+              </span>
+            </div>
+          </div>
+          <button
+            id="copy-email-btn"
+            type="button"
+            class="flex-shrink-0 inline-flex items-center gap-2 rounded-md border border-slate-700 bg-slate-800 px-4 py-2 text-sm font-medium text-slate-300 hover:bg-slate-700 hover:text-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 transition-colors"
+            aria-label="Copy email address to clipboard"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" id="copy-icon">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+            <svg class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" id="check-icon">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <span id="copy-text">Copy</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- LinkedIn Card -->
+      <a
+        href={linkedinUrl}
+        target="_blank"
+        rel="noreferrer noopener"
+        class="group flex flex-col sm:flex-row items-center gap-3 sm:gap-4 rounded-lg border border-slate-800 bg-slate-900/40 p-4 sm:p-6 transition-all hover:border-slate-700 hover:bg-slate-900/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 text-center sm:text-left"
+      >
+        <div class="w-14 h-14 rounded-full bg-sky-500/10 flex items-center justify-center flex-shrink-0">
+          <LinkedIn class="h-6 w-6 text-sky-400" />
+        </div>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-base font-semibold text-slate-200">LinkedIn</h3>
+          <p class="mt-0.5 text-sm text-slate-400">{viewProfile}</p>
+        </div>
+        <span class="flex-shrink-0 inline-flex items-center gap-1 text-sm text-sky-400 group-hover:text-sky-300">
+          Open
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+        </span>
+      </a>
+
+      <!-- GitHub Card -->
+      <a
+        href={githubUrl}
+        target="_blank"
+        rel="noreferrer noopener"
+        class="group flex flex-col sm:flex-row items-center gap-3 sm:gap-4 rounded-lg border border-slate-800 bg-slate-900/40 p-4 sm:p-6 transition-all hover:border-slate-700 hover:bg-slate-900/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 text-center sm:text-left"
+      >
+        <div class="w-14 h-14 rounded-full bg-slate-700/30 flex items-center justify-center flex-shrink-0">
+          <GitHub class="h-6 w-6 text-slate-300" />
+        </div>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-base font-semibold text-slate-200">GitHub</h3>
+          <p class="mt-0.5 text-sm text-slate-400">{viewRepositories}</p>
+        </div>
+        <span class="flex-shrink-0 inline-flex items-center gap-1 text-sm text-slate-400 group-hover:text-slate-300">
+          Open
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+        </span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  function decodeEmail(encoded: string): string {
+    return atob(encoded).split('').reverse().join('');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const emailDisplay = document.getElementById('email-display');
+    const copyBtn = document.getElementById('copy-email-btn');
+    const copyIcon = document.getElementById('copy-icon');
+    const checkIcon = document.getElementById('check-icon');
+    const copyText = document.getElementById('copy-text');
+
+    if (!emailDisplay || !copyBtn) return;
+
+    const encodedEmail = emailDisplay.dataset.encoded;
+    if (!encodedEmail) return;
+
+    const email = decodeEmail(encodedEmail);
+    const emailEl = emailDisplay; // Store reference to avoid null checks
+
+    // Reveal email on first interaction
+    let isRevealed = false;
+    function revealEmail() {
+      if (!isRevealed) {
+        emailEl.textContent = email;
+        emailEl.classList.remove('text-sky-300');
+        emailEl.classList.add('text-slate-300');
+        isRevealed = true;
+      }
+    }
+
+    // Click to reveal
+    emailEl.addEventListener('click', revealEmail);
+    copyBtn.addEventListener('click', revealEmail);
+
+    // Copy functionality
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(email);
+        
+        // Show success state
+        if (copyIcon) copyIcon.classList.add('hidden');
+        if (checkIcon) checkIcon.classList.remove('hidden');
+        if (copyText) copyText.textContent = 'Copied!';
+        copyBtn.classList.add('border-green-600', 'text-green-400');
+        copyBtn.classList.remove('border-slate-700', 'text-slate-300');
+
+        // Reset after 2 seconds
+        setTimeout(() => {
+          if (copyIcon) copyIcon.classList.remove('hidden');
+          if (checkIcon) checkIcon.classList.add('hidden');
+          if (copyText) copyText.textContent = 'Copy';
+          copyBtn.classList.remove('border-green-600', 'text-green-400');
+          copyBtn.classList.add('border-slate-700', 'text-slate-300');
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy email:', err);
+        if (copyText) copyText.textContent = 'Failed';
+        
+        setTimeout(() => {
+          if (copyText) copyText.textContent = 'Copy';
+        }, 2000);
+      }
+    });
+  });
+</script>
