@@ -76,7 +76,7 @@ export const es = {
         githubUrl: 'https://github.com/tu-usuario/proyecto-uno', // TODO
         liveUrl: 'https://ejemplo.com/proyecto-uno', // TODO
         image: {
-          src: '/images/projects/proyecto-uno-thumb.jpg', // TODO
+          src: 'images/projects/proyecto-uno-thumb.jpg', // TODO
           alt: 'Captura de pantalla de la interfaz de Proyecto Uno',
         },
         caseStudy: {
@@ -104,7 +104,7 @@ export const es = {
         githubUrl: 'https://github.com/tu-usuario/proyecto-dos', // TODO
         liveUrl: '',
         image: {
-          src: '/images/projects/proyecto-dos-thumb.jpg', // TODO
+          src: 'images/projects/proyecto-dos-thumb.jpg', // TODO
           alt: 'Diagrama o panel relacionado con el backend y APIs de Proyecto Dos',
         },
         caseStudy: {
