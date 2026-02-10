@@ -8,4 +8,5 @@ export default defineConfig({
   // TODO: Update `site` (and optionally `base`) to match your GitHub Pages URL
   site: 'https://mike-eki.github.io',
   base: '/Portfolio-Dev',
+  trailingSlash: "never",
 });
